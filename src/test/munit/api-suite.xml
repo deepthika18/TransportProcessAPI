@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="api-suite.xml" />
+	<munit:test name="getroutes-api-config-test" doc:id="45ed43f9-04cb-433c-a5f0-6d1d2694b3c7" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="c12d8745-997c-4818-a07e-1561bd8dad58" >
+				<munit:payload value="#[readUrl('classpath://getroutesapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getroutesapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getroutesapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\bookings\(transportType)\routes:transportsystem-proc-api-config" doc:id="dfd3afb8-cf77-410d-ad8f-634ca81a6e01" name="get:\bookings\(transportType)\routes:transportsystem-proc-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="7365ac02-9b6c-49a1-833e-0bd2e91d3c8c" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getroutesapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+			<munit-tools:verify-call doc:name="Verify retrive-routes-from-systemapi" doc:id="a203abcc-1961-48ec-8dc8-56ae552b8f5d" processor="flow-ref" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="d9e50151-c256-4bd5-a36b-1b04a89d7521" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="getShedules-api-config-test" doc:id="a8870bb5-02cb-408f-bd92-7446a4640610" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="44ffb60a-21ee-41a3-9311-32fbbb7dd128" >
+				<munit:payload value="#[readUrl('classpath://getShedulesapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getShedulesapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getShedulesapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\bookings\(transportType)\schedules:transportsystem-proc-api-config" doc:id="3034d5eb-257e-4822-a4b6-a3cb920071f6" name="get:\bookings\(transportType)\schedules:transportsystem-proc-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="3eb5d184-536b-4464-8e41-7560d2a4004e" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getShedulesapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+			<munit-tools:verify-call doc:name="Verify retrive-schedules-from-systemapi" doc:id="2bd8a72b-fa5c-488f-b3c4-3d42ac4f25bb" processor="flow-ref" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="122a7c59-4f7d-4f75-b56a-f5969f973a23" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

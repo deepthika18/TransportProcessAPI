@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	
+	<flow name="routesFlow" doc:id="e53b7427-957d-46e2-99b1-f526612da8fc" >
+		<choice doc:name="Choice" doc:id="314d8479-d73d-4c43-a8d9-527ca10395e0" >
+			<when expression='#[vars.companyCode =="TransNational"]'>
+				<set-variable value="#[&quot;/api/&quot; ++ (vars.transportType default &quot;&quot;) ++ p('requester.TransNational.path')]" doc:name="Set path to variable" doc:id="fcc3ad8f-8e0f-4717-902a-fc52b5f6eed3" variableName="resourcePath"/>
+				<http:request method="GET" doc:name="Request-to-transnationl-systemapi" doc:id="20d6dfcc-bb08-4b47-b6c2-6e9b65699500" config-ref="HTTP_Request_configuration_TransNational" path="#[vars.resourcePath]"/>
+				<ee:transform doc:name="JSON output" doc:id="ae967ee1-9280-4c0a-ae13-d91f5e4a29ab" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[
+	{
+		companyCode:vars.companyCode,
+		originLocation:{
+			locationCode:payload.originLocation,
+			locationDesc:"Beauna  Vista  Singapore"
+		},
+		destinationLocation:
+		{
+			locationCode:payload.destinationLocation,
+			locationDesc: "Klang  Malaysia"
+		}
+	}
+]]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression='#[vars.companyCode =="FirstCoach"]'>
+				<set-variable value="#[&quot;/api/&quot; ++ (vars.transportType default &quot;&quot;) ++ p('requester.FirstCoach.routepath')]" doc:name="Set path to variable" doc:id="9adb251b-f591-4797-b548-4cea20955b5b" variableName="resourcePath"/>
+				<http:request method="GET" doc:name="Request-to-firstcoach-systemapi" doc:id="2b6c2806-e4da-4ac5-a649-a873a2f6154e" config-ref="HTTP_Request_configuration_FirstCoach" path="#[vars.resourcePath]"/>
+				<ee:transform doc:name="JSON output" doc:id="22119275-1cb8-4196-83a8-6e1f510832b0" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map(value,index)->
+[
+  {
+    "companyCode": vars.companyCode,
+    "originLocation": {
+      "locationCode": value.originLocation.locationCode,
+      "locationDesc": "Beauna  Vista  Singapore"
+    },
+    "destinationLocation": {
+      "locationCode": value.destinationLocation.locationCode,
+      "locationDesc": "Klang  Malaysia"
+    }
+  }
+]]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise>
+				<logger level="INFO" doc:name="Logger" doc:id="f5387ee0-d467-45d6-87ea-e3049f764ee1" />
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

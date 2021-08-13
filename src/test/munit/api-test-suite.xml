@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+    xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+
+    xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+
+    xmlns="http://www.mulesoft.org/schema/mule/core"
+
+    xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+
+    xsi:schemaLocation="
+
+        http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+
+        http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+
+        http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+
+    <munit:config name="demo-test-suite.xml" />
+
+    <munit:test name="demo-test-suite-demo-main-BAD_REQUEST-Test" doc:id="957e6e46-b569-49a2-9be7-1483ef8cef6c" description="Test" expectedErrorType="APIKIT:BAD_REQUEST">
+
+        <munit:behavior >
+
+            <munit-tools:mock-when doc:name="Mock when APIKIT:BAD_REQUEST" doc:id="42655f5f-8d0b-4642-a102-a10dff790dd1" processor="apikit:router">
+
+                <munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="transportsystem-proc-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+
+                    <munit-tools:error typeId="APIKIT:BAD_REQUEST" />
+
+                </munit-tools:then-return>
+
+            </munit-tools:mock-when>
+
+        </munit:behavior>
+
+        <munit:execution >
+
+            <flow-ref doc:name="Flow-ref to demo-main" doc:id="62afaa4f-e7a9-4ba9-9788-f312301f252b" name="transportsystem-proc-api-main"/>
+
+        </munit:execution>
+
+        <munit:validation >
+
+            <munit-tools:assert-equals doc:name="Assert equals" doc:id="9c330908-602c-4414-a6f0-80acb0a7c615" actual="#[vars.httpStatus]" expected="#[400]"/>
+
+        </munit:validation>
+
+    </munit:test>
+
+    <munit:test name="demo-test-suite-demo-main-NOT_FOUND-Test" doc:id="d36fe75f-4e2d-4a24-b0e4-f8430f7b1aff" description="Test" expectedErrorType="APIKIT:NOT_FOUND">
+
+        <munit:behavior >
+
+            <munit-tools:mock-when doc:name="Mock when APIKIT:NOT_FOUND" doc:id="257984ea-f007-4bef-a518-948633d5383d" processor="apikit:router">
+
+                <munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="transportsystem-proc-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+
+                    <munit-tools:error typeId="APIKIT:NOT_FOUND" />
+
+                </munit-tools:then-return>
+
+            </munit-tools:mock-when>
+
+        </munit:behavior>
+
+        <munit:execution >
+
+            <flow-ref doc:name="Flow Reference" doc:id="099350d8-cf24-49ce-b816-57588006ed82" name="transportsystem-proc-api-main"/>
+
+        </munit:execution>
+
+        <munit:validation >
+
+            <munit-tools:assert-equals doc:name="Assert equals" doc:id="60a77244-929c-48a5-935e-93560e86cb64" actual="#[vars.httpStatus]" expected="#[404]"/>
+
+        </munit:validation>
+
+    </munit:test>
+
+    <munit:test name="demo-test-suite-demo-main-METHOD_NOT_ALLOWED-Test" doc:id="b437bba3-7e93-48c1-94c3-b5894a6c7686" description="Test" expectedErrorType="APIKIT:METHOD_NOT_ALLOWED">
+
+        <munit:behavior >
+
+            <munit-tools:mock-when doc:name="Mock when APIKIT:METHOD_NOT_ALLOWED" doc:id="c6362985-ea33-40f2-8db9-5d27ee3a061b" processor="apikit:router">
+
+                <munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="transportsystem-proc-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+
+                    <munit-tools:error typeId="APIKIT:METHOD_NOT_ALLOWED" />
+
+                </munit-tools:then-return>
+
+            </munit-tools:mock-when>
+
+        </munit:behavior>
+
+        <munit:execution >
+
+            <flow-ref doc:name="Flow-ref to demo-main" doc:id="27bb510f-9fc2-46ee-9604-bdfe85e6a316" name="transportsystem-proc-api-main"/>
+
+        </munit:execution>
+
+        <munit:validation >
+
+            <munit-tools:assert-equals doc:name="Assert equals" doc:id="23286d07-2222-42da-841e-9c9649dd8d88" actual="#[vars.httpStatus]" expected="#[405]"/>
+
+        </munit:validation>
+
+    </munit:test>
+
+    <munit:test name="demo-test-suite-demo-main-NOT_ACCEPTABLE-Test" doc:id="bfa36f28-6093-4d15-9f24-8c852153a06a" description="Test" expectedErrorType="APIKIT:NOT_ACCEPTABLE">
+
+        <munit:behavior >
+
+            <munit-tools:mock-when doc:name="Mock when APIKIT:NOT_ACCEPTABLE" doc:id="239ca3f7-cad9-4470-a6a7-19ddc9e18e5c" processor="apikit:router">
+
+                <munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="transportsystem-proc-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+
+                    <munit-tools:error typeId="APIKIT:NOT_ACCEPTABLE" />
+
+                </munit-tools:then-return>
+
+            </munit-tools:mock-when>
+
+        </munit:behavior>
+
+        <munit:execution >
+
+            <flow-ref doc:name="Flow Reference" doc:id="58507b2b-39dd-4cb9-a86d-45803b890462" name="transportsystem-proc-api-main"/>
+
+        </munit:execution>
+
+        <munit:validation >
+
+            <munit-tools:assert-equals doc:name="Assert equals" doc:id="c9b84b1d-0ab5-4440-b5b6-1828836e1d30" actual="#[vars.httpStatus]" expected="#[406]"/>
+
+        </munit:validation>
+
+    </munit:test>
+
+    <munit:test name="demo-test-suite-demo-main-UNSUPPORTED_MEDIA_TYPE-Test" doc:id="4d1a337a-52a4-4304-9327-33f3cb544217" description="Test" expectedErrorType="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+
+        <munit:behavior >
+
+            <munit-tools:mock-when doc:name="Mock when APIKIT:UNSUPPORTED_MEDIA_TYPE" doc:id="feb54da8-38a6-470d-802c-934d3c4ec9a1" processor="apikit:router">
+
+                <munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="transportsystem-proc-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+
+                    <munit-tools:error typeId="APIKIT:UNSUPPORTED_MEDIA_TYPE" />
+
+                </munit-tools:then-return>
+
+            </munit-tools:mock-when>
+
+        </munit:behavior>
+
+        <munit:execution >
+
+            <flow-ref doc:name="Flow-ref to demo-main" doc:id="149dc9d3-22b1-4e16-af48-8fa75b79c1dd" name="transportsystem-proc-api-main"/>
+
+        </munit:execution>
+
+        <munit:validation >
+
+            <munit-tools:assert-equals doc:name="Assert equals" doc:id="ae16b913-77a2-4471-a400-ff6dec0a3550" actual="#[vars.httpStatus]" expected="#[415]"/>
+
+        </munit:validation>
+
+    </munit:test>
+
+    <munit:test name="demo-test-suite-demo-main-NOT_IMPLEMENTED-Test" doc:id="dd8693a8-fc0e-4f0a-9997-8c237e3d587f" description="Test" expectedErrorType="APIKIT:NOT_IMPLEMENTED">
+
+        <munit:behavior >
+
+            <munit-tools:mock-when doc:name="Mock when APIKIT:NOT_IMPLEMENTED" doc:id="41924522-e3f3-48d9-9402-0f76dd2facd1" processor="apikit:router">
+
+                <munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="transportsystem-proc-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+
+                    <munit-tools:error typeId="APIKIT:NOT_IMPLEMENTED" />
+
+                </munit-tools:then-return>
+
+            </munit-tools:mock-when>
+
+        </munit:behavior>
+
+        <munit:execution >
+
+            <flow-ref doc:name="Flow-ref to demo-main" doc:id="2e0fe02f-eab1-4dfc-b087-4c78e890b62a" name="transportsystem-proc-api-main"/>
+
+        </munit:execution>
+
+        <munit:validation >
+
+            <munit-tools:assert-equals doc:name="Assert equals" doc:id="e4eb30c9-2c9e-4582-9bcb-af531c9808e6" actual="#[vars.httpStatus]" expected="#[501]"/>
+
+        </munit:validation>
+
+    </munit:test>
+	<munit:test name="api-test-suite-transportsystem-proc-api-consoleTest" doc:id="48fa9e38-253f-4dd5-9814-9da5787966d9" description="Test" expectedErrorType="APIKIT:NOT_FOUND">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when APIKIT:NOT_FOUND" doc:id="0dc00a79-e5d0-448e-a7f0-8b66d472a289" processor="apikit:console">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="transportsystem-proc-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_FOUND" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to transportsystem-proc-api-console" doc:id="9bd0cb5d-8942-4c9f-adae-a32b8867e831" name="transportsystem-proc-api-console"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="30998087-83dd-436f-b9ea-86db327e5d1e" actual="#[vars.httpStatus]" expected="#[404]"/>
+		</munit:validation>
+	</munit:test>
+
+</mule>
+

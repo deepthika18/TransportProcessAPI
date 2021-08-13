@@ -1,0 +1,10 @@
+requester:
+  TransNational:
+    host: "localhost"
+    port: "9081"
+    path: "/TransNational/routes"
+  FirstCoach:
+    host: "localhost"
+    port: "9082"
+    routepath: "/FirstCoach/routes"
+    schedulepath: "/FirstCoach/schedules"

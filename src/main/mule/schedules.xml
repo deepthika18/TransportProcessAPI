@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="schedulesFlow" doc:id="b9a75d65-044e-4e0b-b250-5a32aa9be855" >
+		<choice doc:name="Choice" doc:id="85f691ab-5c37-4b28-ba25-88cede794a43" >
+			<when expression='#[vars.companyCode =="FirstCoach"]'>
+				<set-variable value="#[&quot;/api/&quot; ++ (vars.transportType default &quot;&quot;) ++ p('requester.FirstCoach.schedulepath')]" doc:name="Set path to variable" doc:id="eef067ac-a445-4319-a422-688b9b3b6329" variableName="resourcePath"/>
+				<http:request method="GET" doc:name="Request-to-firstcoach-systemapi" doc:id="9f3fea8e-3364-4ac7-b623-f0d5c4811a5a" config-ref="HTTP_Request_configuration_FirstCoach" path="#[vars.resourcePath]"/>
+				<set-variable value="Beauna  Vista  Singapore" doc:name="Set locationDescB variable" doc:id="1a7e063c-41b5-44a0-986d-57123553bc33" variableName="locationDescB"/>
+				<set-variable value="Klang  Malaysia" doc:name="Set locationDescK Variable" doc:id="578faf32-f7cd-417b-813d-ef438f7aa3b0" variableName="locationDescK"/>
+				<ee:transform doc:name="JSON output" doc:id="6c0bbfac-cd5a-47ab-a4c5-aa6944d12e39">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map(value,index)->
+{
+  "departureSchedules": [
+    {
+      "availableSeats": value.departureSchedules.availableSeats[0],
+      "departureDateTime": value.departureSchedules.departureDateTime[0],
+      "travelRoute": {
+        "destinationLocation": {
+          "locationCode": value.departureSchedules.travelRoute.destinationLocation.locationCode[0],
+          "locationDesc":  vars.locationDescK
+          
+      },
+        "originLocation": {
+          "locationCode": value.departureSchedules.travelRoute.originLocation.locationCode[0],
+          "locationDesc":  vars.locationDescB
+          
+          
+        }
+      }
+    },
+    {
+      "availableSeats": value.departureSchedules.availableSeats[1],
+      "departureDateTime": value.departureSchedules.departureDateTime[1],
+      "travelRoute": {
+        "destinationLocation": {
+          "locationCode": value.departureSchedules.travelRoute.destinationLocation.locationCode[1],
+          "locationDesc":  vars.locationDescK
+          
+        },
+        "originLocation": {
+          "locationCode": value.departureSchedules.travelRoute.originLocation.locationCode[1],
+          "locationDesc":  vars.locationDescB
+          
+        }
+      }
+    }
+  ]
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise>
+				<logger level="INFO" doc:name="Logger" doc:id="b5acb0fd-19d8-4c56-8c5c-e79fd8a424a5" />
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

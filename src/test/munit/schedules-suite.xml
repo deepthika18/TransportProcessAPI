@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="schedules-suite.xml" />
+	<munit:test name="schedulesFlow-test" doc:id="d0253cc1-d9ad-4344-bbf4-0017e55e2706" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="b4d3357f-bef1-4726-b927-51c851ab7a6d" >
+				<munit:payload value="#[readUrl('classpath://schedulesFlowtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://schedulesFlowtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://schedulesFlowtest\set-event_variable_.dwl')]" />
+					<munit:variable key="companyCode" value="#[output application/java --- readUrl('classpath://schedulesFlowtest\set-event_variable_1.dwl')]" encoding="UTF-8" mediaType="application/java" />
+					<munit:variable key="transportType" value="#[output application/java --- readUrl('classpath://schedulesFlowtest\set-event_variable_2.dwl')]" encoding="UTF-8" mediaType="application/java" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to schedulesFlow" doc:id="1b913f40-3685-4313-885f-35256ffe92e9" name="schedulesFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="53347ac6-e66e-4d20-8797-e1da014da778" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import schedulesFlowtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+			<munit-tools:verify-call doc:name="Verify JSON output" doc:id="6ec39d04-cf45-4b1f-af9c-74a1cf6acb19" processor="ee:transform" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="6c0bbfac-cd5a-47ab-a4c5-aa6944d12e39" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Verify Request-to-firstcoach-systemapi" doc:id="50689355-4009-45fe-8c38-c2d3f36cabef" processor="http:request" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="9f3fea8e-3364-4ac7-b623-f0d5c4811a5a" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="schedules-suiteTest" doc:id="2ee3e691-02f8-4c76-8b96-a2845129592a" >
+		<munit:behavior >
+			<set-payload value='#[{&#10;  "departureSchedules": [&#10;    {&#10;      "availableSeats": 20,&#10;      "departureDateTime": "2019-04-30T16:41:41",&#10;      "travelRoute": {&#10;        "destinationLocation": {&#10;          "locationCode": "KLG-MY",&#10;          "locationDesc": "Klang  Malaysia"&#10;        },&#10;        "originLocation": {&#10;          "locationCode": "BEN-SG",&#10;          "locationDesc": "Beauna  Vista  Singapore"&#10;        }&#10;      }&#10;    },&#10;    {&#10;      "availableSeats": 30,&#10;      "departureDateTime": "2019-04-30T18:41:41",&#10;      "travelRoute": {&#10;        "destinationLocation": {&#10;          "locationCode": "KLG-MY",&#10;          "locationDesc": "Klang  Malaysia"&#10;        },&#10;        "originLocation": {&#10;          "locationCode": "BL-SG",&#10;          "locationDesc": "Beauna  Vista  Singapore"&#10;        }&#10;      }&#10;    }&#10;  ]&#10;}]' doc:name="Set Payload" doc:id="19846e8e-b78e-4f21-9f12-8d4e4ca99ca3" />
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="Flow Reference" doc:id="5b3cd839-a4ea-4fc1-93fa-5335f8c28280" name="schedulesFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="1e26457c-f145-44fd-ae7b-4a6eacf2e085" is="#[MunitTools::notNullValue()]" message="No Available Seats" expression="#[payload.departureSchedules.availableSeats]"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
